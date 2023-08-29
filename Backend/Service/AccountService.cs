@@ -27,11 +27,6 @@ namespace Backend.Service
             return _context.Accounts.Where(x => x.Phone == phone).FirstOrDefault();
         }
 
-        public Account GetAccountByUsername(string username)
-        {
-            return _context.Accounts.Where(x => x.Username == username).FirstOrDefault();
-        }
-
         public ICollection<Account> GetAllAccounts()
         {
             return _context.Accounts.ToList();

@@ -24,16 +24,11 @@ namespace Backend.Controllers
         [HttpPost("create")]
         public IActionResult CreatePurchase(PurhcahseDto purhcahseDto)
         {
-            var nameAccount = _account.GetAccountByUsername(purhcahseDto.Name);
             var idConcert = _concert.GetConcertById(purhcahseDto.IdConcert);
 
             if (idConcert == null)
             {
                 return BadRequest("Id not found");
-            }
-            else if(nameAccount == null)
-            {
-                return BadRequest("Name not found");
             }
             else
             {
@@ -62,10 +57,10 @@ namespace Backend.Controllers
             return Ok(purchaseId);
         }
 
-        [HttpPut("update")]
+        /*[HttpPut("update")]
         public IActionResult UpdatePurchase(int id, PurhcahseDto purhcahseDto)
         {
             var purchaseName = _purchaseRepo.GetAllPurchase().Where(p => p.n)
-        }
+        }*/
     }
 }

@@ -2,6 +2,7 @@
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ConcertifyContext))]
-    partial class ConcertifyContextModelSnapshot : ModelSnapshot
+    [Migration("20230825135741_sc")]
+    partial class sc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,9 +70,6 @@ namespace Backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Date")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -92,8 +92,6 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Concerts");
                 });
 
@@ -103,11 +101,12 @@ namespace Backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("AccountEmail")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<int>("ConcertId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -118,37 +117,18 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountEmail");
-
                     b.HasIndex("ConcertId");
 
                     b.ToTable("Purchases");
                 });
 
-            modelBuilder.Entity("Backend.Model.Concert", b =>
-                {
-                    b.HasOne("Backend.Model.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("Backend.Model.Purchase", b =>
                 {
-                    b.HasOne("Backend.Model.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountEmail");
-
                     b.HasOne("Backend.Model.Concert", "Concert")
                         .WithMany()
                         .HasForeignKey("ConcertId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Account");
 
                     b.Navigation("Concert");
                 });

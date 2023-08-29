@@ -19,14 +19,14 @@ namespace Backend.Controllers
         [HttpPost("create")]
         public IActionResult CreateConcert([FromQuery] ConcertDto concertDto)
         {
-            var checkConcertName = _concertRepo.GetAllConcert().Where(c => c.Name.ToLower() == concertDto.Name.ToLower()).FirstOrDefault();
+            var checkConcertName = _concertRepo.GetAllConcert().Where(c => c.Musisi.ToLower() == concertDto.Musisi.ToLower()).FirstOrDefault();
             if (checkConcertName != null) return BadRequest("Concert Name already exist");
 
             var newConcert = new Model.Concert
             {
-                Name = concertDto.Name,
                 Musisi = concertDto.Musisi,
                 Image = concertDto.Image,
+                Description = concertDto.Description,
                 Venue = concertDto.Venue,
                 Date = concertDto.Date
             };
@@ -52,7 +52,7 @@ namespace Backend.Controllers
         [HttpPut("update")]
         public IActionResult UpdateConcert(int id, ConcertDto concertDto)
         {
-            var concertName = _concertRepo.GetAllConcert().Where(n => n.Name == concertDto.Name).FirstOrDefault();
+            var concertName = _concertRepo.GetAllConcert().Where(n => n.Musisi == concertDto.Musisi).FirstOrDefault();
             var concertId = _concertRepo.GetConcertById(id);
 
             if (concertId == null)
@@ -61,12 +61,11 @@ namespace Backend.Controllers
             }
             else
             {
-                if (concertId.Name != concertDto.Name && concertName != null)
+                if (concertId.Musisi != concertDto.Musisi && concertName != null)
                 {
                     return BadRequest("Concert Name already exist");
                 }
 
-                concertId.Name = concertDto.Name;
                 concertId.Musisi = concertDto.Musisi;
                 concertId.Image = concertDto.Image;
                 concertId.Venue = concertDto.Venue;

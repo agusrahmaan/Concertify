@@ -24,16 +24,11 @@ namespace Backend.Controllers
         [HttpPost("Register")]
         public IActionResult Register(Account account)
         {
-            var username = _accountRepo.GetAccountByUsername(account.Username);
             var name = _accountRepo.GetAccountByName(account.Name);
             var email = _accountRepo.GetAccountByEmail(account.Email);
             var phone = _accountRepo.GetAccountByPhone(account.Phone);
 
-            if (username != null)
-            {
-                return BadRequest("Username Already Exist");
-            }
-            else if(name != null)
+            if(name != null)
             {
                 return BadRequest("Name Already Exist");
             }
@@ -52,10 +47,9 @@ namespace Backend.Controllers
 
                 var registerAccount = new Account
                 {
-                    Username = account.Username,
+                    Email = account.Email,
                     Password = hashPassword,
                     Name = account.Name,
-                    Email = account.Email,
                     Phone = account.Phone
                 };
 
@@ -67,7 +61,7 @@ namespace Backend.Controllers
         [HttpPost("Login")]
         public IActionResult Login(LoginDto loginDto)
         {
-            var checkAccount = _accountRepo.GetAccountByUsername(loginDto.username);
+            var checkAccount = _accountRepo.GetAccountByEmail(loginDto.email);
 
             if (checkAccount == null)
             {
@@ -88,9 +82,8 @@ namespace Backend.Controllers
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, account.Username),
-                new Claim(ClaimTypes.NameIdentifier, account.Name),
                 new Claim(ClaimTypes.Email, account.Email),
+                new Claim(ClaimTypes.NameIdentifier, account.Name),
                 new Claim(ClaimTypes.MobilePhone, account.Phone)
             };
 
